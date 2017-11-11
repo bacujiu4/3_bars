@@ -36,7 +36,7 @@ def get_distance(longitude1, latitude1, longitude2, latitude2):
         latitudes_diff = latitude2 - latitude1
         a = sin(latitudes_diff / 2) ** 2 + cos(latitude1) * cos(latitude2) * sin(longitudes_diff / 2) ** 2
         c = 2 * asin(sqrt(a))
-        distance = 6371 * c #6371 - Радиус Земли
+        distance = 6372.795 * c
         return distance
 
 
@@ -44,20 +44,21 @@ def get_closest_bar(bars_parameters_list, longitude, latitude):
     with_distance_list = list()
     for bar in bars_parameters_list:
         distance = get_distance(bar[2][1], bar[2][0], longitude, latitude)
-        with_distance_list.append((bar[0], bar[1], bar[2], distance))
+        with_distance_list.append([bar[0], bar[1], bar[2], distance])
     return min(with_distance_list,
                key=lambda get_bar_parameter: get_bar_parameter[3])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--path', help='Путь к файлу .json')
-    parser.add_argument('-la','--latitude', help='Ввести широту')
-    parser.add_argument('-lo', '--longitude', help='Ввести долготу')
+    parser.add_argument('json_file_path')
+    parser.add_argument('latitude')
+    parser.add_argument('longitude')
     args = parser.parse_args()
-    parsed_json_data = load_data(args.path)
+    parsed_json_data = load_data(args.json_file_path)
     bars_parameters_list = get_bars_parameters_list(parsed_json_data)
     smallest_bar = get_smallest_bar(bars_parameters_list)
     biggest_bar = get_biggest_bar(bars_parameters_list)
+    closest_bar = get_closest_bar(bars_parameters_list, float(args.longitude), float(args.latitude))
     print(smallest_bar)
     print(biggest_bar)
-    print(get_closest_bar(bars_parameters_list, float(args.longitude), float(args.latitude)))
+    print(closest_bar)
