@@ -110,8 +110,7 @@
     },
     "properties": {
       "DatasetId": 1796,
-      "VersionNumber": 2,
-      "ReleaseNumber": 2,
+      "VersionNumber": 2,      "ReleaseNumber": 2,
       "RowId": "eaee66f3-3dd9-475b-8146-784dd27746c7",
       "Attributes": {
         "global_id": 20660826,
