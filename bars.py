@@ -21,9 +21,8 @@ def get_bars_parameters_list(parsed_json_data):
 
 
 def get_biggest_bar(bars_parameters_list):
-    biggest_bar = max(bars_parameters_list,
-                      key=lambda get_bar_parameter: get_bar_parameter[1])
-    return biggest_bar
+    return max(bars_parameters_list,
+               key=lambda get_bar_parameter: get_bar_parameter[1])
 
 
 def get_smallest_bar(bars_parameters_list):
@@ -32,13 +31,13 @@ def get_smallest_bar(bars_parameters_list):
 
 
 def get_distance(longitude1, latitude1, longitude2, latitude2):
-        longitude1, latitude1, longitude2, latitude2 = map(radians, [longitude1, latitude1, longitude2, latitude2])
-        longitudes_diff = longitude2 - longitude1
-        latitudes_diff = latitude2 - latitude1
-        a = sin(latitudes_diff / 2) ** 2 + cos(latitude1) * cos(latitude2) * sin(longitudes_diff / 2) ** 2
-        c = 2 * asin(sqrt(a))
-        distance = 6372.795 * c
-        return distance
+    longitude1, latitude1, longitude2, latitude2 = map(radians, [longitude1, latitude1, longitude2, latitude2])
+    longitudes_diff = longitude2 - longitude1
+    latitudes_diff = latitude2 - latitude1
+    a = sin(latitudes_diff / 2) ** 2 + cos(latitude1) * cos(latitude2) * sin(longitudes_diff / 2) ** 2
+    c = 2 * asin(sqrt(a))
+    distance = 6372.795 * c
+    return distance
 
 
 def get_closest_bar(bars_parameters_list, longitude, latitude):
