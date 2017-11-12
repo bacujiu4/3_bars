@@ -1,7 +1,8 @@
 import json
 import codecs
-from math import *
+from math import sin, asin, cos, sqrt, radians
 import argparse
+
 
 def load_data(file_path):
     with codecs.open(file_path, 'r', "utf_8_sig") as opened_file:
@@ -47,6 +48,7 @@ def get_closest_bar(bars_parameters_list, longitude, latitude):
         with_distance_list.append([bar[0], bar[1], bar[2], distance])
     return min(with_distance_list,
                key=lambda get_bar_parameter: get_bar_parameter[3])
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
