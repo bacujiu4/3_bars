@@ -64,16 +64,16 @@ if __name__ == '__main__':
     smallest_bar_attributes = get_smallest_bar_attributes(parsed_json_data)
     biggest_bar_attributes = get_biggest_bar_attributes(parsed_json_data)
     closest_bar_attributes = get_closest_bar_attributes(parsed_json_data, longitude, latitude)
-    print('Самый маленький бар:',
-          '\n Название:', smallest_bar_attributes['properties']['Attributes']['Name'],
-          '\n Число мест:', smallest_bar_attributes['properties']['Attributes']['SeatsCount'],
-          '\n Координаты:', smallest_bar_attributes['geometry']['coordinates'])
-    print('Самый большой бар:',
-          '\n Название:', biggest_bar_attributes['properties']['Attributes']['Name'],
-          '\n Число мест:', biggest_bar_attributes['properties']['Attributes']['SeatsCount'],
-          '\n Координаты:', biggest_bar_attributes['geometry']['coordinates'])
-    print('Ближайший бар:',
-          '\n Название:', closest_bar_attributes[0]['properties']['Attributes']['Name'],
-          '\n Число мест:', closest_bar_attributes[0]['properties']['Attributes']['SeatsCount'],
-          '\n Координаты:', closest_bar_attributes[0]['geometry']['coordinates'],
-          '\n Расстояние:', closest_bar_attributes[1])
+    print('Самый маленький бар:')
+    print('   Название:', smallest_bar_attributes['properties']['Attributes']['Name'])
+    print('   Число мест:', smallest_bar_attributes['properties']['Attributes']['SeatsCount'])
+    print('   Координаты:', smallest_bar_attributes['geometry']['coordinates'])
+    print('Самый большой бар:')
+    print('   Название:', biggest_bar_attributes['properties']['Attributes']['Name'])
+    print('   Число мест:', biggest_bar_attributes['properties']['Attributes']['SeatsCount'])
+    print('   Координаты:', biggest_bar_attributes['geometry']['coordinates'])
+    print('Ближайший бар:')
+    print('   Название:', closest_bar_attributes[0]['properties']['Attributes']['Name'])
+    print('   Число мест:', closest_bar_attributes[0]['properties']['Attributes']['SeatsCount'])
+    print('   Координаты:', closest_bar_attributes[0]['geometry']['coordinates'])
+    print('   Расстояние:', closest_bar_attributes[1])
