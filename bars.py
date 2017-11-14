@@ -11,41 +11,32 @@ def load_data(file_path):
     return parsed_json_data
 
 
-def get_biggest_bar_attributes(parsed_json_data):
-    biggest_bar_attributes = max(parsed_json_data['features'],
-                                 key=lambda bar: bar['properties']['Attributes']['SeatsCount'])
-    return biggest_bar_attributes
+def get_bar(parsed_json_data, function):
+    bar = function(parsed_json_data['features'],
+                   key=lambda bar: bar['properties']['Attributes']['SeatsCount'])
+    return bar
 
 
-def get_smallest_bar_attributes(parsed_json_data):
-    smallest_bar_attributes = min(parsed_json_data['features'],
-                                  key=lambda bar: bar['properties']['Attributes']['SeatsCount'])
-    return smallest_bar_attributes
+def get_closest_bar(parsed_json_data, longitude, latitude):
+    closest_bar = min(parsed_json_data['features'],
+                      key=lambda bar: get_distance(bar['geometry']['coordinates'][0],
+                                                   bar['geometry']['coordinates'][1],
+                                                   longitude, latitude))
+    min_distance = get_distance(closest_bar['geometry']['coordinates'][0],
+                                closest_bar['geometry']['coordinates'][1],
+                                longitude, latitude)
+    return closest_bar, min_distance
 
 
 def get_distance(longitude1, latitude1, longitude2, latitude2):
-        longitude1, latitude1, longitude2, latitude2 = map(radians, [longitude1, latitude1, longitude2, latitude2])
-        longitudes_diff = longitude2 - longitude1
-        latitudes_diff = latitude2 - latitude1
-        a = sin(latitudes_diff / 2) ** 2 + cos(latitude1) * cos(latitude2) * sin(longitudes_diff / 2) ** 2
-        c = 2 * asin(sqrt(a))
-        distance = 6371 * c  # 6371 - Радиус Земли
-        return distance
-
-
-def get_closest_bar_attributes(parsed_json_data, longitude, latitude):
-    min_distance = get_distance(parsed_json_data['features'][0]['geometry']['coordinates'][0],
-                                parsed_json_data['features'][0]['geometry']['coordinates'][1],
-                                longitude, latitude)
-    min_distance_bar_attributes = list()
-    for bar in parsed_json_data['features']:
-        distance = get_distance(bar['geometry']['coordinates'][0],
-                                bar['geometry']['coordinates'][1],
-                                longitude, latitude)
-        if distance < min_distance:
-            min_distance = distance
-            min_distance_bar_attributes = bar
-    return min_distance_bar_attributes, min_distance
+    longitude1, latitude1, longitude2, latitude2 = map(radians, [longitude1, latitude1, longitude2, latitude2])
+    longitudes_diff = longitude2 - longitude1
+    latitudes_diff = latitude2 - latitude1
+    a = sin(latitudes_diff / 2) ** 2 + cos(latitude1) * cos(latitude2) * sin(longitudes_diff / 2) ** 2
+    c = 2 * asin(sqrt(a))
+    earth_radius = 6371
+    distance = earth_radius * c
+    return distance
 
 
 def parse_args():
@@ -61,19 +52,19 @@ if __name__ == '__main__':
     parsed_json_data = load_data(args.path)
     longitude = float(args.longitude)
     latitude = float(args.latitude)
-    smallest_bar_attributes = get_smallest_bar_attributes(parsed_json_data)
-    biggest_bar_attributes = get_biggest_bar_attributes(parsed_json_data)
-    closest_bar_attributes = get_closest_bar_attributes(parsed_json_data, longitude, latitude)
+    smallest_bar = get_bar(parsed_json_data, min)
+    biggest_bar = get_bar(parsed_json_data, max)
+    closest_bar = get_closest_bar(parsed_json_data, longitude, latitude)
     print('Самый маленький бар:')
-    print('   Название:', smallest_bar_attributes['properties']['Attributes']['Name'])
-    print('   Число мест:', smallest_bar_attributes['properties']['Attributes']['SeatsCount'])
-    print('   Координаты:', smallest_bar_attributes['geometry']['coordinates'])
+    print('   Название:', smallest_bar['properties']['Attributes']['Name'])
+    print('   Число мест:', smallest_bar['properties']['Attributes']['SeatsCount'])
+    print('   Координаты:', smallest_bar['geometry']['coordinates'])
     print('Самый большой бар:')
-    print('   Название:', biggest_bar_attributes['properties']['Attributes']['Name'])
-    print('   Число мест:', biggest_bar_attributes['properties']['Attributes']['SeatsCount'])
-    print('   Координаты:', biggest_bar_attributes['geometry']['coordinates'])
+    print('   Название:', biggest_bar['properties']['Attributes']['Name'])
+    print('   Число мест:', biggest_bar['properties']['Attributes']['SeatsCount'])
+    print('   Координаты:', biggest_bar['geometry']['coordinates'])
     print('Ближайший бар:')
-    print('   Название:', closest_bar_attributes[0]['properties']['Attributes']['Name'])
-    print('   Число мест:', closest_bar_attributes[0]['properties']['Attributes']['SeatsCount'])
-    print('   Координаты:', closest_bar_attributes[0]['geometry']['coordinates'])
-    print('   Расстояние:', closest_bar_attributes[1])
+    print('   Название:', closest_bar[0]['properties']['Attributes']['Name'])
+    print('   Число мест:', closest_bar[0]['properties']['Attributes']['SeatsCount'])
+    print('   Координаты:', closest_bar[0]['geometry']['coordinates'])
+    print('   Расстояние:', closest_bar[1])
